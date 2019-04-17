@@ -1,6 +1,16 @@
 package src;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.io.*;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+
 /*
 INFO
+
 You play an intergalactic mail carrier who must deliver mail to a number of inhabited moons. He
 must safely steer a course from moon to moon while avoiding dangerous asteroids. The mail
 carrier is paid for each delivery he makes, but pay is deducted for time spent hanging around on
@@ -18,7 +28,20 @@ the rocket is hit by an asteroid, and a high-score table will be displayed. Figu
 impression of what the final game will look like.
 
  */
-private class Game extends JPanel{
+public class Game extends JPanel {
+    public static final int screenWidth = 1280;
+    public static final int screenHeight = 720;
+    private boolean running = false;
+
+    private BufferedImage world;
+    private BufferedImage lastSavedWorld;
+    private JFrame gameFrame;
+
+    private Graphics2D buffer;
+    private Thread thread;
+
+    
+
     public static void main(String[] args){
 
     }
