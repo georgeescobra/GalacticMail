@@ -40,7 +40,7 @@ public class Game extends JPanel {
     private Graphics2D buffer;
     private Thread thread;
 
-    
+
 
     public static void main(String[] args){
 
