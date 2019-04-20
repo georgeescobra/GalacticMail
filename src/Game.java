@@ -38,28 +38,29 @@ public class Game extends JPanel {
     private Graphics2D buffer;
     private Thread thread;
 
+    private SpaceMailMan player;
 
     //All the Images
-    private BufferedImage world;
-    private BufferedImage background;
-    private BufferedImage lastSavedWorld;
+        private BufferedImage world;
+        private BufferedImage background;
+        private BufferedImage lastSavedWorld;
 
-    private BufferedImage landedShip;
-    private BufferedImage flyingShip;
+        private BufferedImage landedShip;
+        private BufferedImage flyingShip;
 
-    private BufferedImage asteroid;
-    //this is the actual planet
-    private BufferedImage moon0;
-    private BufferedImage moon1;
-    private BufferedImage moon2;
-    private BufferedImage moon3;
+        private BufferedImage asteroid;
+        //this is the actual planet
+        private BufferedImage moon0;
+        private BufferedImage moon1;
+        private BufferedImage moon2;
+        private BufferedImage moon3;
 
-    //this is to add variety to the bases on the planets
-    private BufferedImage base0;
-    private BufferedImage base1;
-    private BufferedImage base2;
-    private BufferedImage base3;
-    private BufferedImage base4;
+        //this is to add variety to the bases on the planets
+        private BufferedImage base0;
+        private BufferedImage base1;
+        private BufferedImage base2;
+        private BufferedImage base3;
+        private BufferedImage base4;
 
 
     private void init(){
@@ -72,6 +73,10 @@ public class Game extends JPanel {
         //draws background
         buffer.drawImage(this.background.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0 , 0, null);
 
+        this.player = new SpaceMailMan(1000, 500, 0, 0, 0, this.flyingShip);
+        PlayerControls playerCntrl = new PlayerControls(this.player,  KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
+
+        this.gameFrame.addKeyListener(playerCntrl);
         this.gameFrame.setLayout(new BorderLayout());
         this.gameFrame.add(this);
         this.gameFrame.setSize(screenWidth, screenHeight);
@@ -85,6 +90,8 @@ public class Game extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         buffer = this.world.createGraphics();
         super.paintComponent(g2);
+
+        buffer.drawImage(this.flyingShip, player.getX() , player.getY(), null);
         g2.drawImage(this.world, 0 , 0, null);
     }
     private void loadImages(){
@@ -125,6 +132,8 @@ public class Game extends JPanel {
         try{
             while(newGame.running){
                 newGame.start();
+                newGame.player.update();
+                newGame.repaint();
                 Thread.sleep(1000/144);
 
             }
