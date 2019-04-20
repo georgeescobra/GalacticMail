@@ -33,16 +33,104 @@ public class Game extends JPanel {
     public static final int screenHeight = 720;
     private boolean running = false;
 
-    private BufferedImage world;
-    private BufferedImage lastSavedWorld;
     private JFrame gameFrame;
 
     private Graphics2D buffer;
     private Thread thread;
 
 
+    //All the Images
+    private BufferedImage world;
+    private BufferedImage background;
+    private BufferedImage lastSavedWorld;
 
-    public static void main(String[] args){
+    private BufferedImage landedShip;
+    private BufferedImage flyingShip;
+
+    private BufferedImage asteroid;
+    //this is the actual planet
+    private BufferedImage moon0;
+    private BufferedImage moon1;
+    private BufferedImage moon2;
+    private BufferedImage moon3;
+
+    //this is to add variety to the bases on the planets
+    private BufferedImage base0;
+    private BufferedImage base1;
+    private BufferedImage base2;
+    private BufferedImage base3;
+    private BufferedImage base4;
+
+
+    private void init(){
+        running = true;
+        loadImages();
+        this.gameFrame = new JFrame("Galactic Mail");
+        this.world = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
+        buffer = this.world.createGraphics();
+
+        //draws background
+        buffer.drawImage(this.background.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0 , 0, null);
+
+        this.gameFrame.setLayout(new BorderLayout());
+        this.gameFrame.add(this);
+        this.gameFrame.setSize(screenWidth, screenHeight);
+        this.gameFrame.setResizable(false);
+        this.gameFrame.setLocationRelativeTo(null);
+        this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.gameFrame.setVisible(true);
 
     }
+    public void paintComponent(Graphics g){
+        Graphics2D g2 = (Graphics2D) g;
+        buffer = this.world.createGraphics();
+        super.paintComponent(g2);
+        g2.drawImage(this.world, 0 , 0, null);
+    }
+    private void loadImages(){
+        try{
+            this.background = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
+
+            this.landedShip = ImageIO.read(getClass().getResource("../resources/LandedShip.png"));
+            this.flyingShip = ImageIO.read(getClass().getResource("../resources/FlyingShip.png"));
+
+            this.asteroid = ImageIO.read(getClass().getResource("../resources/Asteroid.png"));
+
+            //may or may not ending up using all these planets/bases we shall see
+            this.moon0 = ImageIO.read(getClass().getResource("../resources/Planet0.png"));
+            this.moon1 = ImageIO.read(getClass().getResource("../resources/Planet1.png"));
+            this.moon2 = ImageIO.read(getClass().getResource("../resources/Planet2.png"));
+            this.moon3 = ImageIO.read(getClass().getResource("../resources/Planet3.png"));
+
+            this.base0 = ImageIO.read(getClass().getResource("../resources/Base0.png"));
+            this.base1 = ImageIO.read(getClass().getResource("../resources/Base1.png"));
+            this.base2 = ImageIO.read(getClass().getResource("../resources/Base2.png"));
+            this.base3 = ImageIO.read(getClass().getResource("../resources/Base3.png"));
+            this.base4 = ImageIO.read(getClass().getResource("../resources/Base4.png"));
+
+
+        }catch(IOException e){
+            System.out.println("***COULD NOT LOAD IMAGES***");
+            System.out.println(e);
+        }
+    }
+    private synchronized void start(){
+        thread = new Thread(this.thread);
+        thread.start();
+    }
+    public static void main(String[] args){
+        Game newGame = new Game();
+        newGame.init();
+
+        try{
+            while(newGame.running){
+                newGame.start();
+                Thread.sleep(1000/144);
+
+            }
+        }catch(InterruptedException ignored){
+
+        }
+    }
+
 }
