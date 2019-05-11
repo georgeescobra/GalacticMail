@@ -16,6 +16,7 @@ public class SpaceMailMan {
     private int savey;
     private BufferedImage img;
 
+
     //size of SpaceShip
     private int height = 16;
     private int width = 16;

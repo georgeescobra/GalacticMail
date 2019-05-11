@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.*;
 import java.io.*;
 import java.util.Random;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -57,13 +58,6 @@ public class Game extends JPanel {
         private BufferedImage moon2;
         private BufferedImage moon3;
 
-        //this is to add variety to the bases on the planets
-        private BufferedImage base0;
-        private BufferedImage base1;
-        private BufferedImage base2;
-        private BufferedImage base3;
-        private BufferedImage base4;
-
         private Moon moonBase;
 
 
@@ -82,8 +76,8 @@ public class Game extends JPanel {
 
         Random random = new Random();
         for(int i = 0; i < 4; i++) {
-            int x = random.nextInt(screenHeight - 40) + 40;
-            int y = random.nextInt(screenWidth - 40 ) + 40;
+            int x = random.nextInt(screenWidth - 100) + 40;
+            int y = random.nextInt(screenHeight - 100 ) + 40;
             this.moonBase = new Moon(moon, x, y);
         }
 
@@ -101,6 +95,7 @@ public class Game extends JPanel {
     }
     private void loadImages(){
         try{
+
             this.background = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
             this.lastSavedWorld = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
 
@@ -116,11 +111,17 @@ public class Game extends JPanel {
             this.moon2 = ImageIO.read(getClass().getResource("../resources/Planet2.png"));
             this.moon3 = ImageIO.read(getClass().getResource("../resources/Planet3.png"));
 
-            this.base0 = ImageIO.read(getClass().getResource("../resources/Base0.png"));
-            this.base1 = ImageIO.read(getClass().getResource("../resources/Base1.png"));
-            this.base2 = ImageIO.read(getClass().getResource("../resources/Base2.png"));
-            this.base3 = ImageIO.read(getClass().getResource("../resources/Base3.png"));
-            this.base4 = ImageIO.read(getClass().getResource("../resources/Base4.png"));
+
+            BufferedImage base0 = ImageIO.read(getClass().getResource("../resources/Base0.png"));
+            BufferedImage base1 = ImageIO.read(getClass().getResource("../resources/Base1.png"));
+            BufferedImage base2 = ImageIO.read(getClass().getResource("../resources/Base2.png"));
+            BufferedImage base3 = ImageIO.read(getClass().getResource("../resources/Base3.png"));
+            BufferedImage base4 = ImageIO.read(getClass().getResource("../resources/Base4.png"));
+            Moon.bases.add(base0);
+            Moon.bases.add(base1);
+            Moon.bases.add(base2);
+            Moon.bases.add(base3);
+            Moon.bases.add(base4);
 
 
         }catch(IOException e){
