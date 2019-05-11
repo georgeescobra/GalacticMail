@@ -74,7 +74,7 @@ public class Game extends JPanel {
         buffer.drawImage(this.background.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0 , 0, null);
 
         this.player = new SpaceMailMan(1000, 500, 0, 0, 270, this.flyingShip);
-        PlayerControls playerCntrl = new PlayerControls(this.player,  KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
+        PlayerControls playerCntrl = new PlayerControls(this.player,  KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_SHIFT);
 
         this.gameFrame.addKeyListener(playerCntrl);
         this.gameFrame.setLayout(new BorderLayout());
