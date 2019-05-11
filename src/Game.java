@@ -73,7 +73,7 @@ public class Game extends JPanel {
         //draws background
         buffer.drawImage(this.background.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0 , 0, null);
 
-        this.player = new SpaceMailMan(1000, 500, 0, 0, 0, this.flyingShip);
+        this.player = new SpaceMailMan(1000, 500, 0, 0, 270, this.flyingShip);
         PlayerControls playerCntrl = new PlayerControls(this.player,  KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
 
         this.gameFrame.addKeyListener(playerCntrl);
@@ -85,18 +85,12 @@ public class Game extends JPanel {
         this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.gameFrame.setVisible(true);
 
-    }
-    public void paintComponent(Graphics g){
-        Graphics2D g2 = (Graphics2D) g;
-        buffer = this.world.createGraphics();
-        super.paintComponent(g2);
 
-        buffer.drawImage(this.flyingShip, player.getX() , player.getY(), null);
-        g2.drawImage(this.world, 0 , 0, null);
     }
     private void loadImages(){
         try{
             this.background = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
+            this.lastSavedWorld = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
 
             this.landedShip = ImageIO.read(getClass().getResource("../resources/LandedShip.png"));
             this.flyingShip = ImageIO.read(getClass().getResource("../resources/FlyingShip.png"));
@@ -121,10 +115,26 @@ public class Game extends JPanel {
             System.out.println(e);
         }
     }
+
+    @Override
+    public void paintComponent(Graphics g){
+        Graphics2D g2 = (Graphics2D) g;
+        buffer = this.world.createGraphics();
+        super.paintComponent(g2);
+
+        //this has to be constantly updated when the map is updated
+        buffer.drawImage(this.lastSavedWorld.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH), 0 , 0, null);
+
+        this.player.drawImage(buffer);
+        g2.drawImage(this.world, 0 , 0, null);
+
+    }
+
     private synchronized void start(){
         thread = new Thread(this.thread);
         thread.start();
     }
+
     public static void main(String[] args){
         Game newGame = new Game();
         newGame.init();
@@ -135,6 +145,7 @@ public class Game extends JPanel {
                 newGame.player.update();
                 newGame.repaint();
                 Thread.sleep(1000/144);
+                newGame.player.toString();
 
             }
         }catch(InterruptedException ignored){

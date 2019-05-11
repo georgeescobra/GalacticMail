@@ -1,6 +1,10 @@
 package src;
 
 import java.awt.image.BufferedImage;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 public class SpaceMailMan {
     private int x;
@@ -113,26 +117,26 @@ public class SpaceMailMan {
     }
 
     private void moveBackwards() {
-        vx = (int) Math.round(R * Math.cos(Math.toRadians(angle)));
-        vy = (int) Math.round(R * Math.sin(Math.toRadians(angle)));
+        this.vx = (int) Math.round(this.R * Math.cos(Math.toRadians(this.angle)));
+        this.vy = (int) Math.round(this.R * Math.sin(Math.toRadians(this.angle)));
 
-        savex = x;
-        savey = y;
+        this.savex = this.x;
+        this.savey = this.y;
 
-        x -= vx;
-        y -= vy;
+        this.x -= this.vx;
+        this.y -= this.vy;
 
     }
 
     private void moveForwards() {
-        vx = (int) Math.round(R * Math.cos(Math.toRadians(angle)));
-        vy = (int) Math.round(R * Math.sin(Math.toRadians(angle)));
+        this.vx = (int) Math.round(this.R * Math.cos(Math.toRadians(this.angle)));
+        this.vy = (int) Math.round(this.R * Math.sin(Math.toRadians(this.angle)));
 
-        savex = x;
-        savey = y;
+        this.savex = this.x;
+        this.savey = this.y;
 
-        x += vx;
-        y += vy;
+        this.x += this.vx;
+        this.y += this.vy;
 
     }
 
@@ -143,4 +147,15 @@ public class SpaceMailMan {
         return this.y;
     }
 
+    @Override
+    public String toString(){
+        return "x=" + x + ", y=" + y + ",angle=" + angle;
+    }
+
+    public void drawImage(Graphics g){
+        AffineTransform rotation = AffineTransform.getTranslateInstance(this.x,this.y);
+        rotation.rotate(Math.toRadians(this.angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.drawImage(this.img, rotation, null);
+    }
 }
