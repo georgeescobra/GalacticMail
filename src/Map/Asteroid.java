@@ -6,21 +6,22 @@ import java.awt.image.BufferedImage;
 //then it will go back to the opposite edge giving an illusion of infinite map
 
 public class Asteroid extends Terrain{
+    BufferedImage img;
     public Asteroid(){
 
     }
     @Override
-    void movement() {
+    public void movement() {
 
     }
 
     @Override
-    BufferedImage getImage() {
-        return null;
+    public BufferedImage getImage() {
+        return this.img;
     }
 
     @Override
-    void setImage() {
-
+    public void setImage(BufferedImage newImg) {
+        this.img = newImg;
     }
 }

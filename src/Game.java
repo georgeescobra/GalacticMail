@@ -1,10 +1,11 @@
 package src;
-
+import src.Map.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.event.KeyEvent;
 import java.awt.*;
 import java.io.*;
+import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -50,6 +51,7 @@ public class Game extends JPanel {
 
         private BufferedImage asteroid;
         //this is the actual planet
+        private BufferedImage moon;
         private BufferedImage moon0;
         private BufferedImage moon1;
         private BufferedImage moon2;
@@ -61,6 +63,8 @@ public class Game extends JPanel {
         private BufferedImage base2;
         private BufferedImage base3;
         private BufferedImage base4;
+
+        private Moon moonBase;
 
 
     private void init(){
@@ -76,6 +80,14 @@ public class Game extends JPanel {
         this.player = new SpaceMailMan(1000, 500, 0, 0, 270, this.flyingShip);
         PlayerControls playerCntrl = new PlayerControls(this.player,  KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_SHIFT);
 
+        Random random = new Random();
+        for(int i = 0; i < 4; i++) {
+            int x = random.nextInt(screenHeight - 40) + 40;
+            int y = random.nextInt(screenWidth - 40 ) + 40;
+            this.moonBase = new Moon(moon, x, y);
+        }
+
+        //for JFrame
         this.gameFrame.addKeyListener(playerCntrl);
         this.gameFrame.setLayout(new BorderLayout());
         this.gameFrame.add(this);
@@ -98,6 +110,7 @@ public class Game extends JPanel {
             this.asteroid = ImageIO.read(getClass().getResource("../resources/Asteroid.png"));
 
             //may or may not ending up using all these planets/bases we shall see
+            this.moon = ImageIO.read(getClass().getResource("../resources/Moon.png"));
             this.moon0 = ImageIO.read(getClass().getResource("../resources/Planet0.png"));
             this.moon1 = ImageIO.read(getClass().getResource("../resources/Planet1.png"));
             this.moon2 = ImageIO.read(getClass().getResource("../resources/Planet2.png"));
@@ -126,6 +139,7 @@ public class Game extends JPanel {
         buffer.drawImage(this.lastSavedWorld.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH), 0 , 0, null);
 
         this.player.drawImage(buffer);
+        this.moonBase.drawImage(buffer);
         g2.drawImage(this.world, 0 , 0, null);
 
     }

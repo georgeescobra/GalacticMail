@@ -3,8 +3,7 @@ package src;
 import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import javax.imageio.ImageIO;
-import javax.swing.*;
+
 
 public class SpaceMailMan {
     private int x;

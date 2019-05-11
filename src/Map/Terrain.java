@@ -5,6 +5,6 @@ import java.awt.image.BufferedImage;
 public abstract class Terrain {
     abstract void movement();
     abstract BufferedImage getImage();
-    abstract void setImage();
+    abstract void setImage(BufferedImage newImg);
 }
 
