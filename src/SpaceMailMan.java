@@ -15,11 +15,13 @@ public class SpaceMailMan {
     private int savex;
     private int savey;
     private BufferedImage img;
+    private boolean flying;
+    private Rectangle bounds;
 
 
     //size of SpaceShip
-    private int height = 16;
-    private int width = 16;
+    private final int height = 44;
+    private final int width = 40;
 
     private final double R = 1;
     private final int rotationSpeed = 2;
@@ -37,7 +39,9 @@ public class SpaceMailMan {
         this.vy = vy;
         this.img = img;
         this.angle = angle;
-
+        this.flying = true;
+        this.bounds = new Rectangle(x, y, width, height);
+        this.bounds.setBounds(this.bounds);
     }
     void toggleUpPressed() {
         this.UpPressed = true;
@@ -126,6 +130,8 @@ public class SpaceMailMan {
         this.x -= this.vx;
         this.y -= this.vy;
 
+        this.bounds.setLocation(this.x, this.y);
+
     }
 
     private void moveForwards() {
@@ -138,6 +144,10 @@ public class SpaceMailMan {
         this.x += this.vx;
         this.y += this.vy;
 
+        this.bounds.setLocation(this.x, this.y);
+
+       // System.out.println(this.x);
+        //System.out.println(this.y);
     }
 
     public int getX(){
@@ -147,15 +157,24 @@ public class SpaceMailMan {
         return this.y;
     }
 
+    public Rectangle getBounds(){return this.bounds;}
+    public boolean flyingStatus(){return this.flying;}
+    public void setFlyingStatus(boolean s){this.flying = s;}
+    public void setImage(BufferedImage img){this.img = img;}
+    public BufferedImage getImg(){return this.img;}
     @Override
     public String toString(){
         return "x=" + x + ", y=" + y + ",angle=" + angle;
     }
 
     public void drawImage(Graphics g){
-        AffineTransform rotation = AffineTransform.getTranslateInstance(this.x,this.y);
-        rotation.rotate(Math.toRadians(this.angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(this.img, rotation, null);
+        if(this.flying) {
+            AffineTransform rotation = AffineTransform.getTranslateInstance(this.x, this.y);
+            rotation.rotate(Math.toRadians(this.angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.drawImage(this.img, rotation, null);
+            g2d.setColor(Color.BLUE);
+            g2d.fill(this.bounds);
+        }
     }
 }
