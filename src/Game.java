@@ -75,11 +75,14 @@ public class Game extends JPanel {
         PlayerControls playerCntrl = new PlayerControls(this.player,  KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_SHIFT);
 
         Random random = new Random();
-        for(int i = 0; i < 4; i++) {
-            int x = random.nextInt(screenWidth - 100) + 40;
-            int y = random.nextInt(screenHeight - 100 ) + 40;
+
+        int numOfMoons = 7;
+        while(Moon.moonHolder.size() < numOfMoons) {
+            int x = random.nextInt(screenWidth - 200);
+            int y = random.nextInt(screenHeight - 150) + 40;
             this.moonBase = new Moon(moon, x, y);
         }
+
 
         //for JFrame
         this.gameFrame.addKeyListener(playerCntrl);

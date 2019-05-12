@@ -12,8 +12,11 @@ public class Moon extends Terrain {
     private BufferedImage img;
     private int xcord;
     private int ycord;
+    private final int imgWidth = 75;
+    private final int imgHeight = 75;
     private boolean mailDelivered;
     private boolean shipLanded;
+    private Rectangle bounds;
     private BufferedImage baseImg;
     private static Random random = new Random();
     public static ArrayList<Moon> moonHolder = new ArrayList<>();
@@ -21,13 +24,30 @@ public class Moon extends Terrain {
 
 
     public Moon(BufferedImage itself, int x, int y){
-        this.img = itself;
+        this.img =  itself;
         this.xcord = x;
         this.ycord = y;
         this.mailDelivered = false;
         this.shipLanded = false;
-        moonHolder.add(this);
+        this.bounds = new Rectangle(x, y, imgWidth, imgHeight);
+        //should add after it checks that there are no intersecting rectangles
+        // moonHolder.add(this);
         this.baseImg = bases.get(random.nextInt(bases.size()));
+
+        if(moonHolder.size() > 1){
+            int counter = 0;
+            for(int i = 0; i < moonHolder.size(); i++){
+                Moon temp = moonHolder.get(i);
+                if(!temp.bounds.intersects(this.bounds)){
+                    counter++;
+                }
+            }
+            if(counter == moonHolder.size()){
+                moonHolder.add(this);
+            }
+        }else{
+            moonHolder.add(this);
+        }
     }
     @Override
     public void movement() {
@@ -51,8 +71,8 @@ public class Moon extends Terrain {
         Graphics2D g2d = (Graphics2D) g;
         for(int i = 0; i < moonHolder.size(); i++){
             Moon temp = moonHolder.get(i);
-            g2d.drawImage(temp.img, temp.xcord, temp.ycord, null);
-            g2d.drawImage(temp.baseImg, temp.xcord + (temp.img.getWidth()/2 - temp.baseImg.getWidth()/2), temp.ycord, null);
+            g2d.drawImage(temp.img.getScaledInstance(imgWidth, imgHeight, Image.SCALE_SMOOTH), temp.xcord, temp.ycord, null);
+            g2d.drawImage(temp.baseImg, temp.xcord + (imgWidth/2 - temp.baseImg.getWidth()/2), temp.ycord, null);
         }
     }
 }
