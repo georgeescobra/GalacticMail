@@ -51,7 +51,7 @@ public class Game extends JPanel {
         private BufferedImage landedShip;
         private BufferedImage flyingShip;
 
-        private BufferedImage asteroid;
+        private BufferedImage asteroidimg;
         //this is the actual planet
         private BufferedImage moon;
         private BufferedImage moon0;
@@ -60,6 +60,7 @@ public class Game extends JPanel {
         private BufferedImage moon3;
 
         private Moon moonBase;
+        private Asteroid asteroid;
         private Points highScore;
         private double level;
         private int numOfMoons;
@@ -98,10 +99,17 @@ public class Game extends JPanel {
         //have this constantly update/increment
         //reset the x and y anytime it goes beyond the borders of the screen (infinite screen)
 
-//        numOfAsteroids = 2;
-//        while(Asteroid.asteroidHolder.size() < numOfAsteroids){
-//
-//        }
+        numOfAsteroids = 2;
+        while(Asteroid.asteroidHolder.size() < numOfAsteroids){
+            int x  = random.nextInt(screenWidth - 200);
+            int y = random.nextInt(screenHeight - 150);
+            int direction = random.nextInt(2);
+            int angle = random.nextInt(361);
+            double speed = 1;
+            this.asteroid = new Asteroid(x, y, direction, speed, angle, this.asteroidimg);
+
+        }
+
         //for JFrame
         this.gameFrame.addKeyListener(playerCntrl);
         this.gameFrame.setLayout(new BorderLayout());
@@ -123,7 +131,7 @@ public class Game extends JPanel {
             this.landedShip = ImageIO.read(getClass().getResource("../resources/LandedShip.png"));
             this.flyingShip = ImageIO.read(getClass().getResource("../resources/FlyingShip.png"));
 
-            this.asteroid = ImageIO.read(getClass().getResource("../resources/Asteroid.png"));
+            this.asteroidimg = ImageIO.read(getClass().getResource("../resources/Asteroid.png"));
 
             //may or may not ending up using all these planets/bases we shall see
             this.moon = ImageIO.read(getClass().getResource("../resources/Moon.png"));
@@ -161,6 +169,7 @@ public class Game extends JPanel {
         buffer.drawImage(this.lastSavedWorld.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH), 0 , 0, null);
 
         this.moonBase.drawImage(buffer, this.player, this.landedShip);
+        this.asteroid.drawImage(buffer);
         this.player.drawImage(buffer);
 
         g2.drawImage(this.world, 0 , 0, null);
@@ -184,24 +193,45 @@ public class Game extends JPanel {
                 newGame.repaint();
                 if(newGame.player.launchPressed() && !newGame.player.flyingStatus()){
                     double newScore = newGame.highScore.getPoints();
-                    newScore = newScore +(newGame.level * 50);
+                    newScore = newScore +(newGame.level * 30);
                     newGame.highScore.setPoints(newScore);
                 }
                 if(!newGame.player.flyingStatus() && newGame.highScore.getPoints() > 0){
                     double newScore = newGame.highScore.getPoints();
-                    newScore = newScore - newGame.level * .01;
+                    newScore = newScore - newGame.level * .03;
+                    if(newScore <= 0){
+                        break;
+                    }
                     newGame.highScore.setPoints((newScore));
                 }
                 if(src.Map.Moon.moonHolder.size() == 1){
-                    if(newGame.player.launchPressed() && !newGame.player.flyingStatus()) {
-
+                    if(!newGame.player.flyingStatus()) {
                         while(Moon.moonHolder.size() < newGame.numOfMoons) {
                             int x = random.nextInt(screenWidth - 200);
                             int y = random.nextInt(screenHeight - 150) + 40;
                             newGame.moonBase = new Moon(newGame.moon, x, y);
                         }
                         newGame.level++;
+                        src.Map.Asteroid.asteroidHolder.clear();
+                        System.out.println(Asteroid.asteroidHolder.size());
+                        int size = newGame.numOfAsteroids + (int)newGame.level;
+                        if(size > 5) {
+                            size = 5;
+                        }
+                        for(int i = 0; i < size; i++){
+                            int x  = random.nextInt(screenWidth - 200);
+                            int y = random.nextInt(screenHeight - 150);
+                            int direction = random.nextInt(2);
+                            int angle = random.nextInt(361);
+                            double speed = 1 +  newGame.level * .25;
+                            newGame.asteroid = new Asteroid(x, y, direction, speed, angle, newGame.asteroidimg);
+                        }
                     }
+                }
+
+                for(int i = 0; i < Asteroid.asteroidHolder.size(); i++){
+                    Asteroid temp = Asteroid.asteroidHolder.get(i);
+                    temp.update();
                 }
                 newGame.player.update();
                 newGame.gameFrame.setTitle(String.format("***%s***     LEVEL:  %01d       SCORE:  %-2d", "GALACTIC MAIL", (int)newGame.level, (int) newGame.highScore.getPoints() ));

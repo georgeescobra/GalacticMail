@@ -53,10 +53,7 @@ public class Moon extends Terrain {
             moonHolder.add(this);
         }
     }
-    @Override
-    public void movement() {
 
-    }
 
     @Override
     public BufferedImage getImage() {
