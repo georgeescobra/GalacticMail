@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.text.DecimalFormat;
 
 /*
 INFO
@@ -61,6 +62,7 @@ public class Game extends JPanel {
         private Moon moonBase;
         private Points highScore;
         private int level;
+        private int numOfMoons;
 
     private void init(){
         running = true;
@@ -78,7 +80,7 @@ public class Game extends JPanel {
 
         Random random = new Random();
 
-        int numOfMoons = 7;
+        numOfMoons = 7;
         while(Moon.moonHolder.size() < numOfMoons) {
             int x = random.nextInt(screenWidth - 200);
             int y = random.nextInt(screenHeight - 150) + 40;
@@ -161,18 +163,34 @@ public class Game extends JPanel {
         newGame.highScore = new Points(0);
         newGame.level = 1;
         newGame.init();
-
+        Random random = new Random();
         try{
             while(newGame.running){
                 newGame.start();
                 newGame.repaint();
                 if(newGame.player.launchPressed() && !newGame.player.flyingStatus()){
-                    int newScore = newGame.highScore.getPoints();
-                    newScore += 100;
+                    float newScore = newGame.highScore.getPoints();
+                    newScore = newScore +(newGame.level * 50);
                     newGame.highScore.setPoints(newScore);
-                    System.out.println("hello");
+                }
+                if(!newGame.player.flyingStatus() && newGame.highScore.getPoints() > 0){
+                    float newScore = newGame.highScore.getPoints();
+                    newScore -= .01;
+                    newGame.highScore.setPoints((newScore));
+                }
+                if(src.Map.Moon.moonHolder.size() == 1){
+                    if(newGame.player.launchPressed() && !newGame.player.flyingStatus()) {
+
+                        while(Moon.moonHolder.size() < newGame.numOfMoons) {
+                            int x = random.nextInt(screenWidth - 200);
+                            int y = random.nextInt(screenHeight - 150) + 40;
+                            newGame.moonBase = new Moon(newGame.moon, x, y);
+                        }
+                        newGame.level++;
+                    }
                 }
                 newGame.player.update();
+                DecimalFormat df = new DecimalFormat("###");
                 newGame.gameFrame.setTitle("Galactic Mail!!!     Level: " + newGame.level + "    Score: " + newGame.highScore.getPoints());
                 Thread.sleep(1000/144);
 

@@ -102,6 +102,8 @@ public class SpaceMailMan {
         }
         if (this.LaunchPressed && !this.flying){
             this.flying = true;
+            this.x = this.moon.getX();
+            this.y = this.moon.getY();
             src.Map.Moon.moonHolder.remove(this.moon);
             Random random = new Random();
             rotationSpeed = random.nextInt(4) + 1;
