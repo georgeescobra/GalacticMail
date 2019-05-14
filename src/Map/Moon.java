@@ -84,6 +84,7 @@ public class Moon extends Terrain {
                 player.setFlyingStatus(false);
                 player.setMoon(temp);
                 player.setAngle(0);
+                player.setRotaionSpeed(2);
 
             }
                 //this draws the moonbase

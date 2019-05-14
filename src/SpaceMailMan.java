@@ -4,8 +4,7 @@ import src.Map.*;
 import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-
-
+import java.util.Random;
 
 
 public class SpaceMailMan {
@@ -29,7 +28,7 @@ public class SpaceMailMan {
     private final int width = 40;
 
     private final double R = 1;
-    private final int rotationSpeed = 2;
+    private int rotationSpeed = 2;
 
     private boolean UpPressed;
     private boolean DownPressed;
@@ -104,6 +103,8 @@ public class SpaceMailMan {
         if (this.LaunchPressed && !this.flying){
             this.flying = true;
             src.Map.Moon.moonHolder.remove(this.moon);
+            Random random = new Random();
+            rotationSpeed = random.nextInt(4) + 1;
         }
 
 
@@ -173,6 +174,7 @@ public class SpaceMailMan {
     public void setMoon(Moon moon){this.moon = moon;}
     public int getAngle(){return this.angle;}
     public void setAngle(int a){this.angle = a;}
+    public void setRotaionSpeed(int s){this.rotationSpeed = s;}
     public BufferedImage getImg(){return this.img;}
     @Override
     public String toString(){
