@@ -41,6 +41,7 @@ public class Moon extends Terrain {
             int counter = 0;
             for(int i = 0; i < moonHolder.size(); i++){
                 Moon temp = moonHolder.get(i);
+
                 if(!temp.rectangle.intersects(this.rectangle)){
                     counter++;
                 }
@@ -77,7 +78,6 @@ public class Moon extends Terrain {
         for(int i = 0; i < moonHolder.size(); i++){
             Moon temp = moonHolder.get(i);
             //this draws the spaceship on moon if mailman touches moon
-
 
             if(player.getBounds().intersects(temp.rectangle) && player.flyingStatus()) {
                 player.setImage(landedShip);

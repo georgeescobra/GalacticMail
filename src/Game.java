@@ -61,7 +61,7 @@ public class Game extends JPanel {
 
         private Moon moonBase;
         private Points highScore;
-        private int level;
+        private float level;
         private int numOfMoons;
 
     private void init(){
@@ -86,6 +86,10 @@ public class Game extends JPanel {
             int y = random.nextInt(screenHeight - 150) + 40;
             this.moonBase = new Moon(moon, x, y);
         }
+            //this resets the player to a random moon
+            Moon temp = Moon.moonHolder.get(0);
+            this.player.setX(temp.getX() + temp.getImage().getWidth() / 2);
+            this.player.setY(temp.getY() + temp.getImage().getHeight() / 2);
 
 
         //for JFrame
@@ -175,7 +179,7 @@ public class Game extends JPanel {
                 }
                 if(!newGame.player.flyingStatus() && newGame.highScore.getPoints() > 0){
                     float newScore = newGame.highScore.getPoints();
-                    newScore -= .01;
+                    newScore = newScore - newGame.level/100;
                     newGame.highScore.setPoints((newScore));
                 }
                 if(src.Map.Moon.moonHolder.size() == 1){

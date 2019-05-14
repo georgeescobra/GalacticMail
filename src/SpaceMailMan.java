@@ -104,6 +104,7 @@ public class SpaceMailMan {
             this.flying = true;
             this.x = this.moon.getX();
             this.y = this.moon.getY();
+            this.angle -= 90;
             src.Map.Moon.moonHolder.remove(this.moon);
             Random random = new Random();
             rotationSpeed = random.nextInt(4) + 1;
@@ -176,6 +177,17 @@ public class SpaceMailMan {
     public void setMoon(Moon moon){this.moon = moon;}
     public int getAngle(){return this.angle;}
     public void setAngle(int a){this.angle = a;}
+
+    public void setX(int x){
+        this.x = x;
+        this.bounds.setLocation(this.x, this.y);
+
+    }
+    public void setY(int y){
+        this.y = y;
+        this.bounds.setLocation(this.x, this.y);
+    }
+
     public void setRotaionSpeed(int s){this.rotationSpeed = s;}
     public boolean launchPressed(){return this.LaunchPressed;}
     public BufferedImage getImg(){return this.img;}
