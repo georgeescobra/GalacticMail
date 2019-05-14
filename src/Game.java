@@ -61,13 +61,13 @@ public class Game extends JPanel {
 
         private Moon moonBase;
         private Points highScore;
-        private float level;
+        private double level;
         private int numOfMoons;
         private int numOfAsteroids;
 
     private void init(){
         running = true;
-        this.gameFrame = new JFrame("Galactic Mail!!!     Level: " + level + "Score: " + this.highScore.getPoints());
+        this.gameFrame = new JFrame("Galactic Mail!!!");
 
         loadImages();
         this.world = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
@@ -183,13 +183,13 @@ public class Game extends JPanel {
                 newGame.start();
                 newGame.repaint();
                 if(newGame.player.launchPressed() && !newGame.player.flyingStatus()){
-                    float newScore = newGame.highScore.getPoints();
+                    double newScore = newGame.highScore.getPoints();
                     newScore = newScore +(newGame.level * 50);
                     newGame.highScore.setPoints(newScore);
                 }
                 if(!newGame.player.flyingStatus() && newGame.highScore.getPoints() > 0){
-                    float newScore = newGame.highScore.getPoints();
-                    newScore = newScore - newGame.level/100;
+                    double newScore = newGame.highScore.getPoints();
+                    newScore = newScore - newGame.level * .01;
                     newGame.highScore.setPoints((newScore));
                 }
                 if(src.Map.Moon.moonHolder.size() == 1){
@@ -204,7 +204,7 @@ public class Game extends JPanel {
                     }
                 }
                 newGame.player.update();
-                newGame.gameFrame.setTitle("Galactic Mail!!!     Level: " + newGame.level + "    Score: " + newGame.highScore.getPoints());
+                newGame.gameFrame.setTitle(String.format("***%s***     LEVEL:  %01d       SCORE:  %-2d", "GALACTIC MAIL", (int)newGame.level, (int) newGame.highScore.getPoints() ));
                 Thread.sleep(1000/144);
 
             }

@@ -14,18 +14,18 @@ import java.awt.image.BufferedImage;
 
  */
 public class Points {
-    private float numOfPoints;
+    private double numOfPoints;
     //got to load HighScores each time and draw to this image
 
-    Points(float p){
+    Points(double p){
         this.numOfPoints = p;
     }
 
-    public void setPoints(float p){
+    public void setPoints(double p){
         this.numOfPoints = p;
     }
 
-    public float getPoints(){
+    public double getPoints(){
         return this.numOfPoints;
     }
     //this is going to load all the names and scores into the text file
