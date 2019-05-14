@@ -67,6 +67,8 @@ public class Moon extends Terrain {
         this.img = newImg;
     }
 
+    public int getX(){return this.xcord;}
+    public int getY(){return this.ycord;}
 
     public void drawImage(Graphics2D g, SpaceMailMan player, BufferedImage landedShip){
 //        AffineTransform rotation = AffineTransform.getTranslateInstance(this.x,this.y);
@@ -77,12 +79,13 @@ public class Moon extends Terrain {
             //this draws the spaceship on moon if mailman touches moon
 
 
-            if(player.getBounds().intersects(temp.rectangle)) {
+            if(player.getBounds().intersects(temp.rectangle) && player.flyingStatus()) {
                 player.setImage(landedShip);
                 player.setFlyingStatus(false);
-                g2d.drawImage(player.getImg(), temp.xcord + (imgWidth / 2 - player.getImg().getWidth()/2), temp.ycord - player.getImg().getHeight(), null);
-            }
+                player.setMoon(temp);
+                player.setAngle(0);
 
+            }
                 //this draws the moonbase
                 g2d.drawImage(temp.img.getScaledInstance(imgWidth, imgHeight, Image.SCALE_SMOOTH), temp.xcord, temp.ycord, null);
                 g2d.drawImage(temp.baseImg, temp.xcord + (imgWidth / 2 - temp.baseImg.getWidth() / 2), temp.ycord, null);

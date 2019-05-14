@@ -1,5 +1,6 @@
 package src;
 
+import src.Map.*;
 import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -17,6 +18,7 @@ public class SpaceMailMan {
     private BufferedImage img;
     private boolean flying;
     private Rectangle bounds;
+    private Moon moon;
 
 
     //size of SpaceShip
@@ -83,10 +85,10 @@ public class SpaceMailMan {
 
 
     public void update() {
-        if (this.UpPressed) {
+        if (this.UpPressed && this.flying) {
             this.moveForwards();
         }
-        if (this.DownPressed) {
+        if (this.DownPressed && this.flying) {
             this.moveBackwards();
         }
 
@@ -161,6 +163,9 @@ public class SpaceMailMan {
     public boolean flyingStatus(){return this.flying;}
     public void setFlyingStatus(boolean s){this.flying = s;}
     public void setImage(BufferedImage img){this.img = img;}
+    public void setMoon(Moon moon){this.moon = moon;}
+    public int getAngle(){return this.angle;}
+    public void setAngle(int a){this.angle = a;}
     public BufferedImage getImg(){return this.img;}
     @Override
     public String toString(){
@@ -173,8 +178,14 @@ public class SpaceMailMan {
             rotation.rotate(Math.toRadians(this.angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
             Graphics2D g2d = (Graphics2D) g;
             g2d.drawImage(this.img, rotation, null);
-            g2d.setColor(Color.BLUE);
-            g2d.fill(this.bounds);
+            //System.out.println(this.y);
+        }else{
+
+            Graphics2D g2d = (Graphics2D) g;
+            AffineTransform rotation = AffineTransform.getTranslateInstance(this.moon.getX() + 22, this.moon.getY());
+            rotation.rotate(Math.toRadians(this.angle), (this.moon.getImage().getHeight() / 4),  (this.moon.getImage().getWidth() / 2));
+            //System.out.println(this.y +  (this.height +  this.moon.getImage().getHeight()/ 2.0));
+            g2d.drawImage(this.img, rotation, null);
         }
     }
 }

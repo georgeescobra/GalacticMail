@@ -141,10 +141,10 @@ public class Game extends JPanel {
 
         //this has to be constantly updated when the map is updated
         buffer.drawImage(this.lastSavedWorld.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH), 0 , 0, null);
-        if(this.player.flyingStatus()) {
-            this.player.drawImage(buffer);
-        }
+
         this.moonBase.drawImage(buffer, this.player, this.landedShip);
+        this.player.drawImage(buffer);
+
         g2.drawImage(this.world, 0 , 0, null);
 
     }
