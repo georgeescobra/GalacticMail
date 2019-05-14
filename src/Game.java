@@ -59,12 +59,14 @@ public class Game extends JPanel {
         private BufferedImage moon3;
 
         private Moon moonBase;
-
+        private Points highScore;
+        private int level;
 
     private void init(){
         running = true;
+        this.gameFrame = new JFrame("Galactic Mail!!!     Level: " + level + "Score: " + this.highScore.getPoints());
+
         loadImages();
-        this.gameFrame = new JFrame("Galactic Mail");
         this.world = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         buffer = this.world.createGraphics();
 
@@ -156,15 +158,23 @@ public class Game extends JPanel {
 
     public static void main(String[] args){
         Game newGame = new Game();
+        newGame.highScore = new Points(0);
+        newGame.level = 1;
         newGame.init();
 
         try{
             while(newGame.running){
                 newGame.start();
-                newGame.player.update();
                 newGame.repaint();
+                if(newGame.player.launchPressed() && !newGame.player.flyingStatus()){
+                    int newScore = newGame.highScore.getPoints();
+                    newScore += 100;
+                    newGame.highScore.setPoints(newScore);
+                    System.out.println("hello");
+                }
+                newGame.player.update();
+                newGame.gameFrame.setTitle("Galactic Mail!!!     Level: " + newGame.level + "    Score: " + newGame.highScore.getPoints());
                 Thread.sleep(1000/144);
-                newGame.player.toString();
 
             }
         }catch(InterruptedException ignored){

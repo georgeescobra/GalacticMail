@@ -175,6 +175,7 @@ public class SpaceMailMan {
     public int getAngle(){return this.angle;}
     public void setAngle(int a){this.angle = a;}
     public void setRotaionSpeed(int s){this.rotationSpeed = s;}
+    public boolean launchPressed(){return this.LaunchPressed;}
     public BufferedImage getImg(){return this.img;}
     @Override
     public String toString(){

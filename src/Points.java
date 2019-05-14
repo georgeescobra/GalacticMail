@@ -16,7 +16,6 @@ import java.awt.image.BufferedImage;
 public class Points {
     private int numOfPoints;
     //got to load HighScores each time and draw to this image
-    private BufferedImage HighScores;
 
     Points(int p){
         this.numOfPoints = p;
