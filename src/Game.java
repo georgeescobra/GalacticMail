@@ -63,6 +63,7 @@ public class Game extends JPanel {
         private Points highScore;
         private float level;
         private int numOfMoons;
+        private int numOfAsteroids;
 
     private void init(){
         running = true;
@@ -75,7 +76,7 @@ public class Game extends JPanel {
         //draws background
         buffer.drawImage(this.background.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0 , 0, null);
 
-        this.player = new SpaceMailMan(1000, 500, 0, 0, 270, this.flyingShip);
+        this.player = new SpaceMailMan(0, 0, 0, 0, 270, this.flyingShip);
         PlayerControls playerCntrl = new PlayerControls(this.player,  KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_SHIFT);
 
         Random random = new Random();
@@ -91,7 +92,16 @@ public class Game extends JPanel {
             this.player.setX(temp.getX() + temp.getImage().getWidth() / 2);
             this.player.setY(temp.getY() + temp.getImage().getHeight() / 2);
 
+        //I want the asteroids to be randomly generated
+        //doesn't matter if it collides with moon & spaceship if on moon
+        //Randomly generated angle
+        //have this constantly update/increment
+        //reset the x and y anytime it goes beyond the borders of the screen (infinite screen)
 
+//        numOfAsteroids = 2;
+//        while(Asteroid.asteroidHolder.size() < numOfAsteroids){
+//
+//        }
         //for JFrame
         this.gameFrame.addKeyListener(playerCntrl);
         this.gameFrame.setLayout(new BorderLayout());
@@ -194,7 +204,6 @@ public class Game extends JPanel {
                     }
                 }
                 newGame.player.update();
-                DecimalFormat df = new DecimalFormat("###");
                 newGame.gameFrame.setTitle("Galactic Mail!!!     Level: " + newGame.level + "    Score: " + newGame.highScore.getPoints());
                 Thread.sleep(1000/144);
 

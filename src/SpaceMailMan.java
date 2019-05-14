@@ -13,9 +13,7 @@ public class SpaceMailMan {
     private float vx;
     private float vy;
     private int angle;
-    //helper variables to know which direction the tank is moving
-    private int savex;
-    private int savey;
+
     private BufferedImage img;
     private BufferedImage landed;
     private boolean flying;
@@ -102,8 +100,6 @@ public class SpaceMailMan {
         }
         if (this.LaunchPressed && !this.flying){
             this.flying = true;
-            this.x = this.moon.getX();
-            this.y = this.moon.getY();
             this.angle -= 90;
             src.Map.Moon.moonHolder.remove(this.moon);
             Random random = new Random();
@@ -137,8 +133,6 @@ public class SpaceMailMan {
         this.vx = (int) Math.round(this.R * Math.cos(Math.toRadians(this.angle)));
         this.vy = (int) Math.round(this.R * Math.sin(Math.toRadians(this.angle)));
 
-        this.savex = this.x;
-        this.savey = this.y;
 
         this.x -= this.vx;
         this.y -= this.vy;
@@ -151,16 +145,12 @@ public class SpaceMailMan {
         this.vx = (int) Math.round(this.R * Math.cos(Math.toRadians(this.angle)));
         this.vy = (int) Math.round(this.R * Math.sin(Math.toRadians(this.angle)));
 
-        this.savex = this.x;
-        this.savey = this.y;
 
         this.x += this.vx;
         this.y += this.vy;
 
         this.bounds.setLocation(this.x, this.y);
 
-       // System.out.println(this.x);
-        //System.out.println(this.y);
     }
 
     public int getX(){
@@ -202,13 +192,13 @@ public class SpaceMailMan {
             rotation.rotate(Math.toRadians(this.angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
             Graphics2D g2d = (Graphics2D) g;
             g2d.drawImage(this.img, rotation, null);
-            //System.out.println(this.y);
         }else{
 
             Graphics2D g2d = (Graphics2D) g;
             AffineTransform rotation = AffineTransform.getTranslateInstance(this.moon.getX() + 22, this.moon.getY());
+            this.setX(this.moon.getX() + 22);
+            this.setY(this.moon.getY());
             rotation.rotate(Math.toRadians(this.angle), (this.moon.getImage().getHeight() / 4),  (this.moon.getImage().getWidth() / 2));
-            //System.out.println(this.y +  (this.height +  this.moon.getImage().getHeight()/ 2.0));
             g2d.drawImage(this.landed, rotation, null);
         }
     }
