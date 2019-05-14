@@ -50,6 +50,7 @@ public class Game extends JPanel {
 
         private BufferedImage landedShip;
         private BufferedImage flyingShip;
+        private BufferedImage title;
 
         private BufferedImage asteroidimg;
         //this is the actual planet
@@ -66,11 +67,31 @@ public class Game extends JPanel {
         private int numOfMoons;
         private int numOfAsteroids;
 
+    private void gameMenu(){
+
+
+        this.gameFrame = new JFrame("Galactic Mail!!!");
+        this.world = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
+        this.buffer = this.world.createGraphics();
+        buffer.drawImage(this.background.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0 , 0, null);
+        buffer.drawImage(this.title.getScaledInstance(700, 400, Image.SCALE_SMOOTH), screenWidth / 2 - (700 / 2),50, null);
+
+       // this.gameFrame.addKeyListener(MouseEvent click);
+        this.gameFrame.setLayout(new BorderLayout());
+        this.gameFrame.add(this);
+        this.gameFrame.setSize(screenWidth, screenHeight);
+        this.gameFrame.setResizable(false);
+        this.gameFrame.setLocationRelativeTo(null);
+        this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.gameFrame.setVisible(true);
+
+        running = false;
+
+    }
+
     private void init(){
         running = true;
-        this.gameFrame = new JFrame("Galactic Mail!!!");
 
-        loadImages();
         this.world = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         buffer = this.world.createGraphics();
 
@@ -112,13 +133,13 @@ public class Game extends JPanel {
 
         //for JFrame
         this.gameFrame.addKeyListener(playerCntrl);
-        this.gameFrame.setLayout(new BorderLayout());
-        this.gameFrame.add(this);
-        this.gameFrame.setSize(screenWidth, screenHeight);
-        this.gameFrame.setResizable(false);
-        this.gameFrame.setLocationRelativeTo(null);
-        this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.gameFrame.setVisible(true);
+//        this.gameFrame.setLayout(new BorderLayout());
+//        this.gameFrame.add(this);
+//        this.gameFrame.setSize(screenWidth, screenHeight);
+//        this.gameFrame.setResizable(false);
+//        this.gameFrame.setLocationRelativeTo(null);
+//        this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        this.gameFrame.setVisible(true);
 
 
     }
@@ -127,6 +148,7 @@ public class Game extends JPanel {
 
             this.background = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
             this.lastSavedWorld = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
+            this.title = ImageIO.read(getClass().getResource("../resources/Title.png"));
 
             this.landedShip = ImageIO.read(getClass().getResource("../resources/LandedShip.png"));
             this.flyingShip = ImageIO.read(getClass().getResource("../resources/FlyingShip.png"));
@@ -166,11 +188,13 @@ public class Game extends JPanel {
         super.paintComponent(g2);
 
         //this has to be constantly updated when the map is updated
-        buffer.drawImage(this.lastSavedWorld.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH), 0 , 0, null);
+        if(running) {
+            buffer.drawImage(this.lastSavedWorld.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH), 0, 0, null);
 
-        this.moonBase.drawImage(buffer, this.player, this.landedShip);
-        this.asteroid.drawImage(buffer);
-        this.player.drawImage(buffer);
+            this.moonBase.drawImage(buffer, this.player, this.landedShip);
+            this.asteroid.drawImage(buffer);
+            this.player.drawImage(buffer);
+        }
 
         g2.drawImage(this.world, 0 , 0, null);
 
@@ -183,9 +207,13 @@ public class Game extends JPanel {
 
     public static void main(String[] args){
         Game newGame = new Game();
+        newGame.loadImages();
+        newGame.gameMenu();
         newGame.highScore = new Points(0);
         newGame.level = 1;
-        newGame.init();
+        if(newGame.running) {
+            newGame.init();
+        }
         Random random = new Random();
         try{
             while(newGame.running){
