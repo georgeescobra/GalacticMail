@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 
 
+
+
 public class SpaceMailMan {
     private int x;
     private int y;
@@ -16,6 +18,7 @@ public class SpaceMailMan {
     private int savex;
     private int savey;
     private BufferedImage img;
+    private BufferedImage landed;
     private boolean flying;
     private Rectangle bounds;
     private Moon moon;
@@ -98,6 +101,10 @@ public class SpaceMailMan {
         if (this.RightPressed) {
             this.rotateRight();
         }
+        if (this.LaunchPressed && !this.flying){
+            this.flying = true;
+            src.Map.Moon.moonHolder.remove(this.moon);
+        }
 
 
     }
@@ -162,7 +169,7 @@ public class SpaceMailMan {
     public Rectangle getBounds(){return this.bounds;}
     public boolean flyingStatus(){return this.flying;}
     public void setFlyingStatus(boolean s){this.flying = s;}
-    public void setImage(BufferedImage img){this.img = img;}
+    public void setImage(BufferedImage img){this.landed = img;}
     public void setMoon(Moon moon){this.moon = moon;}
     public int getAngle(){return this.angle;}
     public void setAngle(int a){this.angle = a;}
@@ -185,7 +192,7 @@ public class SpaceMailMan {
             AffineTransform rotation = AffineTransform.getTranslateInstance(this.moon.getX() + 22, this.moon.getY());
             rotation.rotate(Math.toRadians(this.angle), (this.moon.getImage().getHeight() / 4),  (this.moon.getImage().getWidth() / 2));
             //System.out.println(this.y +  (this.height +  this.moon.getImage().getHeight()/ 2.0));
-            g2d.drawImage(this.img, rotation, null);
+            g2d.drawImage(this.landed, rotation, null);
         }
     }
 }
