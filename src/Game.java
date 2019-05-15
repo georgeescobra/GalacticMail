@@ -1,12 +1,9 @@
 package src;
 import src.Map.*;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.awt.event.KeyEvent;
 import java.awt.*;
 import java.io.*;
 import java.util.Random;
@@ -43,6 +40,7 @@ public class Game extends JPanel {
     private JFrame gameFrame;
 
     private Graphics2D buffer;
+    private Graphics2D bufferM;
     private Thread thread;
 
     private SpaceMailMan player;
@@ -51,6 +49,7 @@ public class Game extends JPanel {
         private BufferedImage world;
         private BufferedImage background;
         private BufferedImage lastSavedWorld;
+        private BufferedImage menuBg;
 
         private BufferedImage landedShip;
         private BufferedImage flyingShip;
@@ -59,10 +58,7 @@ public class Game extends JPanel {
         private BufferedImage asteroidimg;
         //this is the actual planet
         private BufferedImage moon;
-        private BufferedImage moon0;
-        private BufferedImage moon1;
-        private BufferedImage moon2;
-        private BufferedImage moon3;
+
 
         private Moon moonBase;
         private Asteroid asteroid;
@@ -70,37 +66,40 @@ public class Game extends JPanel {
         private double level;
         private int numOfMoons;
         private int numOfAsteroids;
+        private boolean menu = true;
 
-    private void gameMenu(){
+        private JButton Start;
+        private JButton HighScore;
+        static protected Game newGame;
+        private MouseInput mouse = new MouseInput();
 
+        private void gameMenu(){
+        this.menu = true;
+        this.running = false;
         this.gameFrame = new JFrame("****GALACTIC MAIL****");
-        this.world = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
-        buffer = this.world.createGraphics();
-        buffer.drawImage(this.background.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0 , 0, null);
-        buffer.drawImage(this.title.getScaledInstance(700, 400, Image.SCALE_SMOOTH), screenWidth / 2 - (700 / 2),50, null);
+        this.menuBg = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
+        bufferM = this.menuBg.createGraphics();
+        bufferM.drawImage(this.background.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0, 0, null);
+        bufferM.drawImage(this.title.getScaledInstance(700, 400, Image.SCALE_SMOOTH), screenWidth / 2 - (700 / 2), 50, null);
 
-        JButton Start = new JButton("START");
-        Start.setBounds(550, 450, 140, 50 );
+        this.Start = new JButton("START");
+        Start.setName("Start");
+        Start.setBounds(550, 450, 140, 50);
         Start.setFont(new Font("Arial", Font.BOLD, 28));
-        Start.setOpaque(true);
-        Start.setBackground(Color.LIGHT_GRAY);
-        Start.setBorderPainted(false);
+        Start.setEnabled(true);
+
+        //got this function from https://alvinalexander.com/java/jbutton-listener-pressed-actionlistener
+        Start.addMouseListener(mouse);
         this.gameFrame.add(Start);
 
-        JButton HighScore = new JButton("HIGHSCORES");
-        HighScore.setBounds(522, 525, 195, 55 );
+        this.HighScore = new JButton("HIGHSCORES");
+        HighScore.setName("HighScore");
+        HighScore.setBounds(522, 525, 195, 55);
         HighScore.setFont(new Font("Arial", Font.BOLD, 22));
-        HighScore.setOpaque(true);
-        HighScore.setBackground(Color.LIGHT_GRAY);
-        HighScore.setBorderPainted(false);
-        this.gameFrame.add(HighScore);
+        HighScore.addMouseListener(mouse);
+        HighScore.setEnabled(true);
 
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-            }
-        });
+        this.gameFrame.add(HighScore);
         this.gameFrame.setLayout(new BorderLayout());
         this.gameFrame.add(this);
         this.gameFrame.setSize(screenWidth, screenHeight);
@@ -109,18 +108,32 @@ public class Game extends JPanel {
         this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.gameFrame.setVisible(true);
 
-        running = false;
+        //for some reason this has to print or do something
+        //in order the buttons to take necessary action
+        while(menu){ System.out.print("");}
+
+
+    }
+
+    public void startGame(){
+        this.menu = false;
+        this.running = true;
+        Start.setFocusable(false);
+        HighScore.setFocusable(false);
 
     }
 
     private void init(){
-        running = true;
+
+        this.gameFrame = new JFrame("****GALACTIC MAIL****");
+        this.Start.setFocusable(false);
+        this.HighScore.setFocusable(false);
 
         this.world = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
-        buffer = this.world.createGraphics();
+        this.buffer = this.world.createGraphics();
 
         //draws background
-        buffer.drawImage(this.background.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0 , 0, null);
+        this.buffer.drawImage(this.background.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0 , 0, null);
 
         this.player = new SpaceMailMan(0, 0, 0, 0, 270, this.flyingShip);
         PlayerControls playerCntrl = new PlayerControls(this.player,  KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_SHIFT);
@@ -154,16 +167,18 @@ public class Game extends JPanel {
             this.asteroid = new Asteroid(x, y, direction, speed, angle, this.asteroidimg);
 
         }
-
+//            if(Start.isEnabled()){
+//
+//            }
         //for JFrame
+        this.gameFrame.setLayout(new BorderLayout());
         this.gameFrame.addKeyListener(playerCntrl);
-//        this.gameFrame.setLayout(new BorderLayout());
-//        this.gameFrame.add(this);
-//        this.gameFrame.setSize(screenWidth, screenHeight);
-//        this.gameFrame.setResizable(false);
-//        this.gameFrame.setLocationRelativeTo(null);
-//        this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        this.gameFrame.setVisible(true);
+        this.gameFrame.add(this);
+        this.gameFrame.setSize(screenWidth, screenHeight);
+        this.gameFrame.setResizable(false);
+        this.gameFrame.setLocationRelativeTo(null);
+        this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.gameFrame.setVisible(true);
 
 
     }
@@ -172,6 +187,7 @@ public class Game extends JPanel {
 
             this.background = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
             this.lastSavedWorld = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
+            this.menuBg = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
             this.title = ImageIO.read(getClass().getResource("../resources/Title.png"));
 
             this.landedShip = ImageIO.read(getClass().getResource("../resources/LandedShip.png"));
@@ -181,11 +197,6 @@ public class Game extends JPanel {
 
             //may or may not ending up using all these planets/bases we shall see
             this.moon = ImageIO.read(getClass().getResource("../resources/Moon.png"));
-            this.moon0 = ImageIO.read(getClass().getResource("../resources/Planet0.png"));
-            this.moon1 = ImageIO.read(getClass().getResource("../resources/Planet1.png"));
-            this.moon2 = ImageIO.read(getClass().getResource("../resources/Planet2.png"));
-            this.moon3 = ImageIO.read(getClass().getResource("../resources/Planet3.png"));
-
 
             BufferedImage base0 = ImageIO.read(getClass().getResource("../resources/Base0.png"));
             BufferedImage base1 = ImageIO.read(getClass().getResource("../resources/Base1.png"));
@@ -208,19 +219,23 @@ public class Game extends JPanel {
     @Override
     public void paintComponent(Graphics g){
         Graphics2D g2 = (Graphics2D) g;
-        buffer = this.world.createGraphics();
-        super.paintComponent(g2);
 
         //this has to be constantly updated when the map is updated
-        if(running) {
-            buffer.drawImage(this.lastSavedWorld.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH), 0, 0, null);
+        if(running && !menu && buffer != null) {
+            buffer = this.world.createGraphics();
+            super.paintComponent(g2);
 
+            buffer.drawImage(this.lastSavedWorld.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH), 0, 0, null);
             this.moonBase.drawImage(buffer, this.player, this.landedShip);
             this.asteroid.drawImage(buffer);
             this.player.drawImage(buffer);
+            g2.drawImage(this.world, 0 , 0, null);
         }
-
-        g2.drawImage(this.world, 0 , 0, null);
+        if(menu && !running){
+            bufferM = this.menuBg.createGraphics();
+            super.paintComponent(g2);
+            g2.drawImage(this.menuBg, 0 , 0, null);
+        }
 
     }
 
@@ -230,14 +245,12 @@ public class Game extends JPanel {
     }
 
     public static void main(String[] args){
-        Game newGame = new Game();
+        newGame = new Game();
         newGame.loadImages();
         newGame.gameMenu();
         newGame.highScore = new Points(0);
         newGame.level = 1;
-        if(newGame.running) {
-            newGame.init();
-        }
+        newGame.init();
         Random random = new Random();
         try{
             while(newGame.running){
