@@ -2,9 +2,7 @@ package src;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -79,6 +77,17 @@ public class Points extends Object{
     public void setHighScore(Points points, int index){
         pointHolder.add(index, points);
         pointHolder.remove(pointHolder.size()-1);
+
+        try{
+            FileWriter fileWriter = new FileWriter("./src/HighScores.txt");
+            BufferedWriter writer = new BufferedWriter(fileWriter);
+            for(int i = 0; i < pointHolder.size(); i++) {
+                System.out.println(pointHolder.get(i).name + " " +pointHolder.get(i).numOfPoints);
+                writer.write(pointHolder.get(i).name + " " + (pointHolder.get(i).numOfPoints) + "\n");
+            }
+        }catch(IOException e) {
+            System.out.println("***COULD NOT WRITE TO FILE");
+        }
     }
     //0 would be highest score
     public int newHighScore(Points playerScore){
@@ -117,7 +126,7 @@ public class Points extends Object{
 
         System.out.println("");
         for(int k = 0; k < pointHolder.size(); k++){
-            System.out.println(pointHolder.get(k).name + " " +pointHolder.get(i).numOfPoints);
+            System.out.println(pointHolder.get(k).name + " " +pointHolder.get(k).numOfPoints);
         }
     }
 

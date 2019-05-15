@@ -127,12 +127,12 @@ public class Game extends JPanel {
         Start.setFocusable(false);
         HighScore.setFocusable(false);
         this.highScores = null;
+        this.gameFrame.dispose();
 
     }
 
     private void init(){
-
-        this.gameFrame = new JFrame("****GALACTIC MAIL****");
+        this.gameFrame = new JFrame(String.format("***%s***     LEVEL:  %01d       SCORE:  %-2d", "GALACTIC MAIL", (int) this.level, (int) this.highScore.getPoints() ));
         this.Start.setFocusable(false);
         this.HighScore.setFocusable(false);
 
@@ -178,15 +178,15 @@ public class Game extends JPanel {
 //
 //            }
         //for JFrame
-        this.gameFrame.setLayout(new BorderLayout());
         this.gameFrame.addKeyListener(playerCntrl);
+        this.gameFrame.add(HighScore);
+        this.gameFrame.setLayout(new BorderLayout());
         this.gameFrame.add(this);
         this.gameFrame.setSize(screenWidth, screenHeight);
         this.gameFrame.setResizable(false);
         this.gameFrame.setLocationRelativeTo(null);
         this.gameFrame.setDefaultCloseOperation(gameFrame.EXIT_ON_CLOSE);
         this.gameFrame.setVisible(true);
-
 
     }
     private void loadImages(){
@@ -314,7 +314,9 @@ public class Game extends JPanel {
                     double newScore = newGame.highScore.getPoints();
                     newScore = newScore - newGame.level * .03;
                     if(newScore <= 0){
-                        break;
+                        newGame.gameFrame.dispose();
+                        newGame.gameMenu();
+                        newGame.init();
                     }
                     newGame.highScore.setPoints((newScore));
                 }
@@ -360,6 +362,7 @@ public class Game extends JPanel {
                     }
                     newGame.highScore = new Points(0);
                     newGame.level = 1;
+                    newGame.gameFrame.dispose();
                     newGame.gameMenu();
                     newGame.init();
 
