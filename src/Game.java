@@ -299,6 +299,14 @@ public class Game extends JPanel {
                     temp.update();
                 }
                 newGame.player.update();
+                //if this returns 0, continue
+                //else add restart button and exit
+                //display Scores
+                int cont = newGame.asteroid.check(newGame.player);
+                if(cont != 0){
+                    System.out.println("CRASHED GAME OVER");
+                    break;
+                }
                 newGame.gameFrame.setTitle(String.format("***%s***     LEVEL:  %01d       SCORE:  %-2d", "GALACTIC MAIL", (int)newGame.level, (int) newGame.highScore.getPoints() ));
                 Thread.sleep(1000/144);
 

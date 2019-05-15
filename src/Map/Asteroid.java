@@ -1,6 +1,7 @@
 package src.Map;
 
 import src.Game;
+import src.SpaceMailMan;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -83,7 +84,6 @@ public class Asteroid extends Terrain{
             this.y += Game.screenHeight;
         }
         this.bounds.setLocation(this.x, this.y);
-
     }
 
     private void moveForwards() {
@@ -101,7 +101,6 @@ public class Asteroid extends Terrain{
         }
 
         this.bounds.setLocation(this.x, this.y);
-
     }
     @Override
     public BufferedImage getImage() {
@@ -111,6 +110,19 @@ public class Asteroid extends Terrain{
     @Override
     public void setImage(BufferedImage newImg) {
         this.img = newImg;
+    }
+
+    //collision check
+    public int check(SpaceMailMan player){
+        for(int i = 0; i < asteroidHolder.size(); i++){
+            Asteroid temp = asteroidHolder.get(i);
+            //only if spaceship is flying
+            if(temp.bounds.intersects(player.getBounds()) && player.flyingStatus()){
+                return 1;
+            }
+
+        }
+        return 0;
     }
 
     public void drawImage(Graphics2D g){
