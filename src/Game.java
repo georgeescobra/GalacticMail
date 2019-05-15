@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 /*
 INFO
@@ -79,14 +80,14 @@ public class Game extends JPanel {
         static protected Game newGame;
         private MouseInput mouse = new MouseInput();
 
-        private void gameMenu(){
+    private void gameMenu(){
         this.menu = true;
         this.running = false;
         this.gameFrame = new JFrame("****GALACTIC MAIL****");
         this.menuWorld = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
-        bufferM = this.menuWorld.createGraphics();
-        bufferM.drawImage(this.menuBg.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0, 0, null);
-        bufferM.drawImage(this.title.getScaledInstance(700, 400, Image.SCALE_SMOOTH), screenWidth / 2 - (700 / 2), 50, null);
+        this.bufferM = this.menuWorld.createGraphics();
+        this.bufferM.drawImage(this.menuBg.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0, 0, null);
+        this.bufferM.drawImage(this.title.getScaledInstance(700, 400, Image.SCALE_SMOOTH), screenWidth / 2 - (700 / 2), 50, null);
 
         this.Start = new JButton("START");
         Start.setName("Start");
@@ -234,13 +235,44 @@ public class Game extends JPanel {
         this.bufferH = this.hsWorld.createGraphics();
         this.bufferH.drawImage(this.hsBG.getScaledInstance(windowWidth, windowHeight, Image.SCALE_AREA_AVERAGING), 0, 0, null);
 
+        this.bufferH.setFont(new Font("Arial", Font.BOLD, 50));
+        this.bufferH.setColor(Color.WHITE);
+
+        int row = 55;
+        int column = 15;
+        for(int i = 0; i < Points.pointHolder.size(); i++){
+            Points temp = Points.pointHolder.get(i);
+//            if(temp.name.equals("new")){
+//                JTextField input = new JTextField();
+//                input.setLocation(row, column);
+//                TextListener tfListener = new TextListener();
+//                input.addActionListener(tfListener);
+//
+//            }
+                this.bufferH.drawString(temp.getName(), column, row);
+                column += 160;
+                this.bufferH.drawString(Integer.toString((int) temp.getPoints()), column, row);
+                column -= 160;
+                row += 50;
+
+        }
+
         this.highScores.setLayout(new BorderLayout());
         this.highScores.setSize(windowWidth, windowHeight);
         this.highScores.setResizable(false);
         this.highScores.setLocationRelativeTo(null);
-        this.highScores.setDefaultCloseOperation(this.highScores.DISPOSE_ON_CLOSE);
+        this.highScores.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.highScores.setVisible(true);
         this.highScores.add(this);
+//        ME 1
+//        ME 2
+//        ME 3
+//        ME 4
+//        ME 5
+//        ME 6
+//        ME 7
+//        ME 8
+//        ME 9
     }
 
     @Override
@@ -249,39 +281,22 @@ public class Game extends JPanel {
 
         //this has to be constantly updated when the map is updated
         if(running && !menu && buffer != null) {
-            this.buffer = this.world.createGraphics();
             super.paintComponent(g2);
 
-            buffer.drawImage(this.lastSavedWorld.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH), 0, 0, null);
+            this.buffer.drawImage(this.lastSavedWorld.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH), 0, 0, null);
             this.moonBase.drawImage(this.buffer, this.player, this.landedShip);
             this.asteroid.drawImage(this.buffer);
             this.player.drawImage(this.buffer);
             g2.drawImage(this.world, 0 , 0, null);
 
         }
-        if(menu && !running){
-            this.bufferM = this.menuWorld.createGraphics();
+        if(menu && !running && this.highScores == null){
             super.paintComponent(g2);
+            g2.drawImage(this.lastSavedWorld.getScaledInstance(500, 500, Image.SCALE_SMOOTH),0, 0, null);
             g2.drawImage(this.menuWorld, 0 , 0, null);
         }
 
         if(this.highScores != null){
-            this.bufferH = this.hsWorld.createGraphics();
-            this.bufferH.setFont(new Font("Arial", Font.BOLD, 50));
-            this.bufferH.setColor(Color.WHITE);
-
-
-            int row = 55;
-            int column = 15;
-            for(int i = 0; i < Points.pointHolder.size(); i++){
-                Points temp = Points.pointHolder.get(i);
-                this.bufferH.drawString(temp.getName(), column, row);
-                column += 160;
-                this.bufferH.drawString(Integer.toString((int)temp.getPoints()), column, row);
-                column -= 160;
-                row += 50;
-            }
-
             super.paintComponent(g2);
             g2.drawImage(this.hsWorld, 0 , 0, null);
         }
@@ -297,6 +312,7 @@ public class Game extends JPanel {
         newGame = new Game();
         newGame.loadImages();
         newGame.highScore = new Points(0);
+        newGame.highScore.loadHighScores();
         newGame.level = 1;
         newGame.gameMenu();
         newGame.init();
@@ -315,6 +331,7 @@ public class Game extends JPanel {
                     newScore = newScore - newGame.level * .03;
                     if(newScore <= 0){
                         newGame.gameFrame.dispose();
+                        newGame.level = 1;
                         newGame.gameMenu();
                         newGame.init();
                     }
@@ -355,14 +372,18 @@ public class Game extends JPanel {
                 //display Scores
                 int cont = newGame.asteroid.check(newGame.player);
                 if(cont != 0){
-                    int indx;
-                    if( (indx = newGame.highScore.newHighScore(newGame.highScore)) >= 0 ){
-                        newGame.highScore.setName("ME");
+                    int indx = newGame.highScore.newHighScore(newGame.highScore);
+                    System.out.println(indx);
+                    System.out.println(Points.pointHolder.size());
+                    if( indx >= 0 ){
+                        newGame.highScore.setName("new");
                         newGame.highScore.setHighScore(newGame.highScore, indx);
+                        newGame.gameFrame.setTitle("****CRASHED****CHECK-HIGHSCORES****");
+                        TimeUnit.SECONDS.sleep(2);
                     }
+                    newGame.gameFrame.dispose();
                     newGame.highScore = new Points(0);
                     newGame.level = 1;
-                    newGame.gameFrame.dispose();
                     newGame.gameMenu();
                     newGame.init();
 

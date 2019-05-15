@@ -20,7 +20,7 @@ import java.util.StringTokenizer;
         5. NAME             SCORE
 
  */
-public class Points extends Object{
+public class Points extends Object {
     private double numOfPoints;
     String name;
     private BufferedReader pointRead;
@@ -29,32 +29,28 @@ public class Points extends Object{
     //got to load HighScores each time and draw to this image
 
 
-    Points(double p){
-        try {
-            FileReader file = new FileReader("./src/HighScores.txt");
-            this.pointRead = new BufferedReader(file);
-        }catch(IOException e){
-            System.out.print(System.getProperty("user.dir"));
-            System.out.println("***CANNOT INITIALIZE READER***" + e.getMessage());
-        }
+    Points(double p) {
         this.numOfPoints = p;
     }
-    Points(String name, double score){
+
+    Points(String name, double score) {
         this.name = name;
         this.numOfPoints = score;
     }
 
-    public void setPoints(double p){
+    public void setPoints(double p) {
         this.numOfPoints = p;
     }
 
-    public double getPoints(){
+    public double getPoints() {
         return this.numOfPoints;
     }
-    //this is going to load all the names and scores into the text file
-    public void loadHighScores(){
 
-        try{
+    //this is going to load all the names and scores into the text file
+    public void loadHighScores() {
+        try {
+            FileReader file = new FileReader("./src/HighScores.txt");
+            this.pointRead = new BufferedReader(file);
             String temp;
             int counter = 0;
             while ((temp = this.pointRead.readLine()) != null && counter < 9) {
@@ -62,59 +58,61 @@ public class Points extends Object{
                 String elem1 = s.nextToken();
                 String elem2 = s.nextToken();
                 double points = Double.parseDouble(elem2);
-                System.out.println(elem1 + " " + points);
                 tempHold.add(new Points(elem1, points));
                 counter++;
             }
+            this.pointRead.close();
 
-            }catch(IOException e){
-            System.out.println("***COULD NOT READ FILE***");
+        } catch (IOException e) {
+            System.out.println("***COULD NOT READ FILE***" + e);
         }
         sortList();
 
     }
-    //this is going to update the BufferedImage if a new highscore was made
-    public void setHighScore(Points points, int index){
-        pointHolder.add(index, points);
-        pointHolder.remove(pointHolder.size()-1);
 
-        try{
-            FileWriter fileWriter = new FileWriter("./src/HighScores.txt");
-            BufferedWriter writer = new BufferedWriter(fileWriter);
-            for(int i = 0; i < pointHolder.size(); i++) {
-                System.out.println(pointHolder.get(i).name + " " +pointHolder.get(i).numOfPoints);
-                writer.write(pointHolder.get(i).name + " " + (pointHolder.get(i).numOfPoints) + "\n");
+    //this is going to update the BufferedImage if a new highscore was made
+    public void setHighScore(Points points, int index) {
+        pointHolder.add(index, points);
+        pointHolder.remove(pointHolder.size() - 1);
+
+        try {
+            Writer fileWriter = new FileWriter("./src/HighScores.txt");
+            for (int i = 0; i < pointHolder.size(); i++) {
+                System.out.println(pointHolder.get(i).name + " " + pointHolder.get(i).numOfPoints);
+                fileWriter.write(pointHolder.get(i).name + " " + (pointHolder.get(i).numOfPoints) + "\n");
             }
-        }catch(IOException e) {
+            fileWriter.close();
+        } catch (IOException e) {
             System.out.println("***COULD NOT WRITE TO FILE");
         }
     }
+
     //0 would be highest score
-    public int newHighScore(Points playerScore){
-        for(int i = 0; i < pointHolder.size(); i++){
-            if(playerScore.numOfPoints > pointHolder.get(i).numOfPoints){
+    public int newHighScore(Points playerScore) {
+        for (int i = 0; i < pointHolder.size(); i++) {
+            if (playerScore.numOfPoints >= pointHolder.get(i).numOfPoints) {
                 return i;
             }
         }
         return -12;
-}
+    }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public void setName(String newName){
+    public void setName(String newName) {
         this.name = newName;
     }
 
-    public void sortList(){
+    public void sortList() {
         int i = 0;
-        while(tempHold.size() > 0){
+        while (tempHold.size() > 0) {
             Points max = tempHold.get(i);
             int ind = i;
-            for(int j = i + 1; j <tempHold.size(); j++){
+            for (int j = i + 1; j < tempHold.size(); j++) {
                 Points comp = tempHold.get(j);
-                if(comp.numOfPoints > max.numOfPoints){
+                if (comp.numOfPoints > max.numOfPoints) {
                     max = comp;
                     ind = j;
                 }
@@ -124,10 +122,6 @@ public class Points extends Object{
 
         }
 
-        System.out.println("");
-        for(int k = 0; k < pointHolder.size(); k++){
-            System.out.println(pointHolder.get(k).name + " " +pointHolder.get(k).numOfPoints);
-        }
-    }
 
+    }
 }
