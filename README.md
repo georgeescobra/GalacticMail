@@ -25,5 +25,6 @@ USE ARROW KEYS
 CWD: /Volumes/MY-SB/college/collegecoding/CSC413/csc413-secondgame-georgeescobra/src
 
 ## RUNNING FILE ##
+	JDK: JAVA11 and built on IntelliJ
 	Goto: $cd csc413-secondgame-georgeescobra/jar/artifacts/csc413_secondgame_georgeescobra_jar
 	Run: $java -jar csc413-secondgame-georgeescobra.jar
