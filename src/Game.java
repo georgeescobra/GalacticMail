@@ -91,7 +91,6 @@ public class Game extends JPanel {
         Start.setFont(new Font("Arial", Font.BOLD, 28));
         Start.setEnabled(true);
 
-        //got this function from https://alvinalexander.com/java/jbutton-listener-pressed-actionlistener
         Start.addMouseListener(mouse);
         this.gameFrame.add(Start);
 
@@ -171,12 +170,9 @@ public class Game extends JPanel {
             this.asteroid = new Asteroid(x, y, direction, speed, angle, this.asteroidimg);
 
         }
-//            if(Start.isEnabled()){
-//
-//            }
+
         //for JFrame
         this.gameFrame.addKeyListener(playerCntrl);
-        this.gameFrame.add(HighScore);
         this.gameFrame.setLayout(new BorderLayout());
         this.gameFrame.add(this);
         this.gameFrame.setSize(screenWidth, screenHeight);
@@ -238,13 +234,6 @@ public class Game extends JPanel {
         int column = 15;
         for(int i = 0; i < Points.pointHolder.size(); i++){
             Points temp = Points.pointHolder.get(i);
-//            if(temp.name.equals("new")){
-//                JTextField input = new JTextField();
-//                input.setLocation(row, column);
-//                TextListener tfListener = new TextListener();
-//                input.addActionListener(tfListener);
-//
-//            }
                 this.bufferH.drawString(temp.getName(), column, row);
                 column += 160;
                 this.bufferH.drawString(Integer.toString((int) temp.getPoints()), column, row);
@@ -260,15 +249,6 @@ public class Game extends JPanel {
         this.highScores.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.highScores.setVisible(true);
         this.highScores.add(this);
-//        ME 1
-//        ME 2
-//        ME 3
-//        ME 4
-//        ME 5
-//        ME 6
-//        ME 7
-//        ME 8
-//        ME 9
     }
 
     @Override
