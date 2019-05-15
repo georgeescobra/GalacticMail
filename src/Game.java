@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.*;
 import java.io.*;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -38,9 +39,11 @@ public class Game extends JPanel {
     private boolean running = false;
 
     private JFrame gameFrame;
+    private JFrame highScores;
 
     private Graphics2D buffer;
     private Graphics2D bufferM;
+    private Graphics2D bufferH;
     private Thread thread;
 
     private SpaceMailMan player;
@@ -50,6 +53,9 @@ public class Game extends JPanel {
         private BufferedImage background;
         private BufferedImage lastSavedWorld;
         private BufferedImage menuBg;
+        private BufferedImage menuWorld;
+        private BufferedImage hsBG;
+        private BufferedImage hsWorld;
 
         private BufferedImage landedShip;
         private BufferedImage flyingShip;
@@ -77,9 +83,9 @@ public class Game extends JPanel {
         this.menu = true;
         this.running = false;
         this.gameFrame = new JFrame("****GALACTIC MAIL****");
-        this.menuBg = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
-        bufferM = this.menuBg.createGraphics();
-        bufferM.drawImage(this.background.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0, 0, null);
+        this.menuWorld = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
+        bufferM = this.menuWorld.createGraphics();
+        bufferM.drawImage(this.menuBg.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0, 0, null);
         bufferM.drawImage(this.title.getScaledInstance(700, 400, Image.SCALE_SMOOTH), screenWidth / 2 - (700 / 2), 50, null);
 
         this.Start = new JButton("START");
@@ -105,7 +111,7 @@ public class Game extends JPanel {
         this.gameFrame.setSize(screenWidth, screenHeight);
         this.gameFrame.setResizable(false);
         this.gameFrame.setLocationRelativeTo(null);
-        this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.gameFrame.setDefaultCloseOperation(gameFrame.EXIT_ON_CLOSE);
         this.gameFrame.setVisible(true);
 
         //for some reason this has to print or do something
@@ -120,6 +126,7 @@ public class Game extends JPanel {
         this.running = true;
         Start.setFocusable(false);
         HighScore.setFocusable(false);
+        this.highScores = null;
 
     }
 
@@ -177,7 +184,7 @@ public class Game extends JPanel {
         this.gameFrame.setSize(screenWidth, screenHeight);
         this.gameFrame.setResizable(false);
         this.gameFrame.setLocationRelativeTo(null);
-        this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.gameFrame.setDefaultCloseOperation(gameFrame.EXIT_ON_CLOSE);
         this.gameFrame.setVisible(true);
 
 
@@ -188,6 +195,8 @@ public class Game extends JPanel {
             this.background = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
             this.lastSavedWorld = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
             this.menuBg = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
+            this.hsBG =  ImageIO.read(getClass().getResource("../resources/Background.bmp"));
+
             this.title = ImageIO.read(getClass().getResource("../resources/Title.png"));
 
             this.landedShip = ImageIO.read(getClass().getResource("../resources/LandedShip.png"));
@@ -215,6 +224,24 @@ public class Game extends JPanel {
             System.out.println(e);
         }
     }
+    public void showLeaderBoard(){
+        this.highScore.loadHighScores();
+        int windowWidth = 500;
+        int windowHeight = 500;
+        this.highScores = new JFrame("****HighScores****");
+        this.hsWorld = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_ARGB);
+
+        this.bufferH = this.hsWorld.createGraphics();
+        this.bufferH.drawImage(this.hsBG.getScaledInstance(windowWidth, windowHeight, Image.SCALE_AREA_AVERAGING), 0, 0, null);
+
+        this.highScores.setLayout(new BorderLayout());
+        this.highScores.setSize(windowWidth, windowHeight);
+        this.highScores.setResizable(false);
+        this.highScores.setLocationRelativeTo(null);
+        this.highScores.setDefaultCloseOperation(this.highScores.DISPOSE_ON_CLOSE);
+        this.highScores.setVisible(true);
+        this.highScores.add(this);
+    }
 
     @Override
     public void paintComponent(Graphics g){
@@ -222,19 +249,41 @@ public class Game extends JPanel {
 
         //this has to be constantly updated when the map is updated
         if(running && !menu && buffer != null) {
-            buffer = this.world.createGraphics();
+            this.buffer = this.world.createGraphics();
             super.paintComponent(g2);
 
             buffer.drawImage(this.lastSavedWorld.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH), 0, 0, null);
-            this.moonBase.drawImage(buffer, this.player, this.landedShip);
-            this.asteroid.drawImage(buffer);
-            this.player.drawImage(buffer);
+            this.moonBase.drawImage(this.buffer, this.player, this.landedShip);
+            this.asteroid.drawImage(this.buffer);
+            this.player.drawImage(this.buffer);
             g2.drawImage(this.world, 0 , 0, null);
+
         }
         if(menu && !running){
-            bufferM = this.menuBg.createGraphics();
+            this.bufferM = this.menuWorld.createGraphics();
             super.paintComponent(g2);
-            g2.drawImage(this.menuBg, 0 , 0, null);
+            g2.drawImage(this.menuWorld, 0 , 0, null);
+        }
+
+        if(this.highScores != null){
+            this.bufferH = this.hsWorld.createGraphics();
+            this.bufferH.setFont(new Font("Arial", Font.BOLD, 50));
+            this.bufferH.setColor(Color.WHITE);
+
+
+            int row = 55;
+            int column = 15;
+            for(int i = 0; i < Points.pointHolder.size(); i++){
+                Points temp = Points.pointHolder.get(i);
+                this.bufferH.drawString(temp.getName(), column, row);
+                column += 160;
+                this.bufferH.drawString(Integer.toString((int)temp.getPoints()), column, row);
+                column -= 160;
+                row += 50;
+            }
+
+            super.paintComponent(g2);
+            g2.drawImage(this.hsWorld, 0 , 0, null);
         }
 
     }
@@ -247,9 +296,9 @@ public class Game extends JPanel {
     public static void main(String[] args){
         newGame = new Game();
         newGame.loadImages();
-        newGame.gameMenu();
         newGame.highScore = new Points(0);
         newGame.level = 1;
+        newGame.gameMenu();
         newGame.init();
         Random random = new Random();
         try{
@@ -304,8 +353,16 @@ public class Game extends JPanel {
                 //display Scores
                 int cont = newGame.asteroid.check(newGame.player);
                 if(cont != 0){
-                    System.out.println("CRASHED GAME OVER");
-                    break;
+                    int indx;
+                    if( (indx = newGame.highScore.newHighScore(newGame.highScore)) >= 0 ){
+                        newGame.highScore.setName("ME");
+                        newGame.highScore.setHighScore(newGame.highScore, indx);
+                    }
+                    newGame.highScore = new Points(0);
+                    newGame.level = 1;
+                    newGame.gameMenu();
+                    newGame.init();
+
                 }
                 newGame.gameFrame.setTitle(String.format("***%s***     LEVEL:  %01d       SCORE:  %-2d", "GALACTIC MAIL", (int)newGame.level, (int) newGame.highScore.getPoints() ));
                 Thread.sleep(1000/144);

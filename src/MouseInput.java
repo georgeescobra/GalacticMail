@@ -19,7 +19,7 @@ public class MouseInput implements MouseListener {
         if(btn.getName().equals("Start")){
             src.Game.newGame.startGame();
         }else if(btn.getName().equals("HighScore")){
-
+            src.Game.newGame.showLeaderBoard();
         }
 
     }
