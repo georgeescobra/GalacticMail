@@ -253,7 +253,7 @@ public class Game extends JPanel {
                 column += 160;
                 this.bufferH.drawString(Integer.toString((int) temp.getPoints()), column, row);
                 column -= 160;
-                row += 50;
+                row += 58;
 
         }
 
