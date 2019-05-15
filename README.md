@@ -18,3 +18,7 @@ USE ARROW KEYS
 		on the moon. As the Space-Mailman avoid the edges as well, it is not 
 		an infinite screen for the you, unlike the Asteroids.
 
+## ASSUMPTIONS ##
+	If ran from the JAR, the JAR cannot write to a file only read a file
+	Therefore the JAR will not be able to write your new highscore to the
+	HighScore.txt file

@@ -153,19 +153,12 @@ public class SpaceMailMan {
 
     }
 
-    public int getX(){
-        return this.x;
-    }
-    public int getY(){
-        return this.y;
-    }
 
     public Rectangle getBounds(){return this.bounds;}
     public boolean flyingStatus(){return this.flying;}
     public void setFlyingStatus(boolean s){this.flying = s;}
     public void setImage(BufferedImage img){this.landed = img;}
     public void setMoon(Moon moon){this.moon = moon;}
-    public int getAngle(){return this.angle;}
     public void setAngle(int a){this.angle = a;}
 
     public void setX(int x){

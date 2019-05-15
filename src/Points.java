@@ -1,11 +1,7 @@
 package src;
 
-import javax.swing.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.StringTokenizer;
 
 
@@ -49,7 +45,7 @@ public class Points extends Object {
     //this is going to load all the names and scores into the text file
     public void loadHighScores() {
         try {
-            FileReader file = new FileReader("./src/HighScores.txt");
+            FileReader file = new FileReader("src/HighScores.txt");
             this.pointRead = new BufferedReader(file);
             String temp;
             int counter = 0;
@@ -76,7 +72,7 @@ public class Points extends Object {
         pointHolder.remove(pointHolder.size() - 1);
 
         try {
-            Writer fileWriter = new FileWriter("./src/HighScores.txt");
+            Writer fileWriter = new FileWriter("src/HighScores.txt");
             for (int i = 0; i < pointHolder.size(); i++) {
                 System.out.println(pointHolder.get(i).name + " " + pointHolder.get(i).numOfPoints);
                 fileWriter.write(pointHolder.get(i).name + " " + (pointHolder.get(i).numOfPoints) + "\n");

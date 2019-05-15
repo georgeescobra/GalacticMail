@@ -5,13 +5,9 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.*;
-import java.io.*;
-import java.util.HashMap;
 import java.util.Random;
-import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
 /*
@@ -193,26 +189,26 @@ public class Game extends JPanel {
     private void loadImages(){
         try{
 
-            this.background = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
-            this.lastSavedWorld = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
-            this.menuBg = ImageIO.read(getClass().getResource("../resources/Background.bmp"));
-            this.hsBG =  ImageIO.read(getClass().getResource("../resources/Background.bmp"));
+            this.background = ImageIO.read(getClass().getResource("/resources/Background.bmp"));
+            this.lastSavedWorld = ImageIO.read(getClass().getResource("/resources/Background.bmp"));
+            this.menuBg = ImageIO.read(getClass().getResource("/resources/Background.bmp"));
+            this.hsBG =  ImageIO.read(getClass().getResource("/resources/Background.bmp"));
 
-            this.title = ImageIO.read(getClass().getResource("../resources/Title.png"));
+            this.title = ImageIO.read(getClass().getResource("/resources/Title.png"));
 
-            this.landedShip = ImageIO.read(getClass().getResource("../resources/LandedShip.png"));
-            this.flyingShip = ImageIO.read(getClass().getResource("../resources/FlyingShip.png"));
+            this.landedShip = ImageIO.read(getClass().getResource("/resources/LandedShip.png"));
+            this.flyingShip = ImageIO.read(getClass().getResource("/resources/FlyingShip.png"));
 
-            this.asteroidimg = ImageIO.read(getClass().getResource("../resources/Asteroid.png"));
+            this.asteroidimg = ImageIO.read(getClass().getResource("/resources/Asteroid.png"));
 
             //may or may not ending up using all these planets/bases we shall see
-            this.moon = ImageIO.read(getClass().getResource("../resources/Moon.png"));
+            this.moon = ImageIO.read(getClass().getResource("/resources/Moon.png"));
 
-            BufferedImage base0 = ImageIO.read(getClass().getResource("../resources/Base0.png"));
-            BufferedImage base1 = ImageIO.read(getClass().getResource("../resources/Base1.png"));
-            BufferedImage base2 = ImageIO.read(getClass().getResource("../resources/Base2.png"));
-            BufferedImage base3 = ImageIO.read(getClass().getResource("../resources/Base3.png"));
-            BufferedImage base4 = ImageIO.read(getClass().getResource("../resources/Base4.png"));
+            BufferedImage base0 = ImageIO.read(getClass().getResource("/resources/Base0.png"));
+            BufferedImage base1 = ImageIO.read(getClass().getResource("/resources/Base1.png"));
+            BufferedImage base2 = ImageIO.read(getClass().getResource("/resources/Base2.png"));
+            BufferedImage base3 = ImageIO.read(getClass().getResource("/resources/Base3.png"));
+            BufferedImage base4 = ImageIO.read(getClass().getResource("/resources/Base4.png"));
             Moon.bases.add(base0);
             Moon.bases.add(base1);
             Moon.bases.add(base2);
