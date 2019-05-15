@@ -1,5 +1,9 @@
 package src;
 import src.Map.*;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.event.KeyEvent;
@@ -69,14 +73,34 @@ public class Game extends JPanel {
 
     private void gameMenu(){
 
-
-        this.gameFrame = new JFrame("Galactic Mail!!!");
+        this.gameFrame = new JFrame("****GALACTIC MAIL****");
         this.world = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
-        this.buffer = this.world.createGraphics();
+        buffer = this.world.createGraphics();
         buffer.drawImage(this.background.getScaledInstance(screenWidth, screenHeight, Image.SCALE_AREA_AVERAGING), 0 , 0, null);
         buffer.drawImage(this.title.getScaledInstance(700, 400, Image.SCALE_SMOOTH), screenWidth / 2 - (700 / 2),50, null);
 
-       // this.gameFrame.addKeyListener(MouseEvent click);
+        JButton Start = new JButton("START");
+        Start.setBounds(550, 450, 140, 50 );
+        Start.setFont(new Font("Arial", Font.BOLD, 28));
+        Start.setOpaque(true);
+        Start.setBackground(Color.LIGHT_GRAY);
+        Start.setBorderPainted(false);
+        this.gameFrame.add(Start);
+
+        JButton HighScore = new JButton("HIGHSCORES");
+        HighScore.setBounds(522, 525, 195, 55 );
+        HighScore.setFont(new Font("Arial", Font.BOLD, 22));
+        HighScore.setOpaque(true);
+        HighScore.setBackground(Color.LIGHT_GRAY);
+        HighScore.setBorderPainted(false);
+        this.gameFrame.add(HighScore);
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+            }
+        });
         this.gameFrame.setLayout(new BorderLayout());
         this.gameFrame.add(this);
         this.gameFrame.setSize(screenWidth, screenHeight);
