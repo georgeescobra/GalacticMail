@@ -45,8 +45,8 @@ public class Points extends Object {
     //this is going to load all the names and scores into the text file
     public void loadHighScores() {
         try {
-            FileReader file = new FileReader("src/HighScores.txt");
-            this.pointRead = new BufferedReader(file);
+            InputStream in = getClass().getResourceAsStream("HighScores.txt");
+            this.pointRead = new BufferedReader(new InputStreamReader(in));
             String temp;
             int counter = 0;
             while ((temp = this.pointRead.readLine()) != null && counter < 9) {
@@ -72,7 +72,7 @@ public class Points extends Object {
         pointHolder.remove(pointHolder.size() - 1);
 
         try {
-            Writer fileWriter = new FileWriter("src/HighScores.txt");
+            Writer fileWriter = new FileWriter("/src/HighScores.txt");
             for (int i = 0; i < pointHolder.size(); i++) {
                 System.out.println(pointHolder.get(i).name + " " + pointHolder.get(i).numOfPoints);
                 fileWriter.write(pointHolder.get(i).name + " " + (pointHolder.get(i).numOfPoints) + "\n");

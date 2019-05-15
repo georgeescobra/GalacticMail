@@ -22,3 +22,8 @@ USE ARROW KEYS
 	If ran from the JAR, the JAR cannot write to a file only read a file
 	Therefore the JAR will not be able to write your new highscore to the
 	HighScore.txt file
+CWD: /Volumes/MY-SB/college/collegecoding/CSC413/csc413-secondgame-georgeescobra/src
+
+## RUNNING FILE ##
+	Goto: $cd csc413-secondgame-georgeescobra/jar/artifacts/csc413_secondgame_georgeescobra_jar
+	Run: $java -jar csc413-secondgame-georgeescobra.jar
