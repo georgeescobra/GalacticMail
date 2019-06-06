@@ -1,6 +1,4 @@
-## csc413-SecondGame : GALACTIC MAIL
-## Student Name : GEORGE JR. ESCOBAR
-## Student ID : 916947881
+## GALACTIC MAILL ##
 
 ## INSTRUCTIONS ##
 USE ARROW KEYS
@@ -22,9 +20,4 @@ USE ARROW KEYS
 	If ran from the JAR, the JAR cannot write to a file only read a file
 	Therefore the JAR will not be able to write your new highscore to the
 	HighScore.txt file
-CWD: /Volumes/MY-SB/college/collegecoding/CSC413/csc413-secondgame-georgeescobra/src
 
-## RUNNING FILE ##
-	JDK: JAVA11 and built on IntelliJ
-	Goto: $cd csc413-secondgame-georgeescobra/jar/artifacts/csc413_secondgame_georgeescobra_jar
-	Run: $java -jar csc413-secondgame-georgeescobra.jar
